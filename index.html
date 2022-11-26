@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-Br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VueJs</title>
+  <style>
+    [v-cloak]{
+      display: none;
+    }
+    .text-class-1{
+      color: pink;
+      font-size: 24px;
+    }
+    .text-class-2 {
+      color: yellowgreen;
+      font-size: 50px;
+    }
+  </style>
+</head>
+
+<body>
+  <main id="main">
+    <fieldset>
+      <legend>v-clock</legend>
+      <p>{{age}}</p>
+      <p v-cloak>{{age}}</p>
+    </fieldset>
+    <fieldset>
+      <legend>Templates</legend>
+      <div v-html="htmlContent"></div>
+      <p>Nome: {{ firstName }}</p>
+      <p>Sobrenome: {{ lastName }}</p>
+      <p>Idade: {{ age >= 18 ? "Maior de idade" : "Menor de idade" }}</p>
+    </fieldset>
+    <fieldset>
+      <legend>Methods</legend>
+      <button v-on:click="increment">+</button>
+      <button @click="decrement()">-</button>
+    </fieldset>
+    <fieldset>
+      <legend>Computed Properties</legend>
+      <p>Nome Completo: {{ fullName }}</p>
+    </fieldset>
+    <fieldset>
+      <legend>Watchers</legend>
+      <label for="address">Endereco: </label>
+      <input v-model="address" id="address" type="text">
+    </fieldset>
+    <fieldset>
+      <legend>v-if</legend>
+      <label for="input-grade"></label>
+      <input type="number" id="input-grade" v-model="grade" min="0" max="100">
+      <p v-if="grade < 60">Reprovado</p>
+      <p v-else-if="grade >= 60 && grade < 98">Aprovado</p>
+      <p v-else-if="grade > 98">Excelente</p>
+      <p v-else="Valor inválido">Excelente</p>
+    </fieldset>
+    <fieldset>
+      <legend>v-show</legend>
+      <button v-show="isUserLogged" @click="loggout()">Sair</button>
+      <button v-show="!isUserLogged" @click="loggout()">Entrar</button>
+    </fieldset>
+    <fieldset>
+      <legend>v-text</legend>
+      <p v-text="firstName"></p>
+    </fieldset>
+    <fieldset>
+      <legend>v-html</legend>
+      <p v-html="htmlContent"></p>
+    </fieldset>
+    <fieldset>
+      <legend>v-once</legend>
+      <p v-once>{{ age }}</p>
+      <p>{{age}}</p>
+    </fieldset>
+    <fieldset>
+      <legend>v-for</legend>
+      <div v-for="i in list">
+        <p>{{ i }}</p>
+      </div>
+      <div v-for="(value, key, index) in Cars">
+        <p>{{value}}</p>
+        <p>{{key}}</p>
+        <p>{{index}}</p>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>v-bind</legend>
+      <a v-bind:href="urlIgti" :[argument]="description">IGTI</a><br>
+      <a :href="urlIgti" v-bind:[argument]="description">IGTI</a>
+    </fieldset>
+    <fieldset>
+      <legend>v-pre</legend>
+      <p v-pre>{{age}}</p>
+    </fieldset>
+    <fieldset>
+      <legend>eventos</legend>
+      <button @click.middle.prevent="eventTestSimple('click')">Click</button>
+      <button @click.left="eventTestSimple">Click Implicit</button>
+      <button @click.right.prevent="eventTest('click',$event)">Click Explicit</button>
+      <button @dblClick="eventTest('doubleClick',$event)">DoubleClick Explicit</button>
+      <button @dblClick="eventTest('doubleClick',$event)">DoubleClick Explicit</button>
+      <button @mouseenter="eventTest('Mouse Enter',$event)">Mouse Enter</button>
+      <button @mouseleave="eventTest('Mouse Leave',$event)">Mouse Leave</button>
+      <a :href="urlIgti" v-bind:[argument]="description" @click.prevent>IGTI</a>
+      <a :href="urlIgti" v-bind:[argument]="description" @click.prevent.once>IGTI</a>
+      <input type="text" @input="eventKeyTest" @keyup.enter="eventKeyTest" @keydown.tab.prevent="eventKeyTest">
+    </fieldset>
+    <fieldset>
+      <legend>Estilos</legend>
+      <p :style="{ color: textColor}">Lorem ipsum</p>
+      <p v-bind:style="textColorObj">Lorem ipsum</p>
+      <p class="text-class-1" :class="testeClass2">Lorem ipsum</p>
+      <p :class="classList">Lorem ipsum</p>
+      <p :class="1 < 0 ? classList : testeClass1">Lorem ipsum</p>
+    </fieldset>
+  </main>
+  <script src="https://unpkg.com/vue@3.0.4"></script>
+  <script>
+    const vm = Vue.createApp({
+      data() {
+        return {
+          htmlContent: "<p>Hello World</p>",
+          firstName: "Daniel",
+          lastName: "Avelino",
+          age: 26,
+          address: "",
+          grade: 0,
+          isUserLogged: false,
+          count: 1,
+          list:["D","a","n","i","e","l"],
+          Cars:[{"teste":"teste2"},{"teste":"teste2"},{"teste":"teste2"},{"teste":"teste2"},{"teste":"teste2"}],
+          urlIgti:"https://www.igti.com.br",
+          description:"Clica aí",
+          argument:"title",
+          textColor:"red",
+          textColorObj:{color:"green", fontSize:"25px"},
+          testeClass1:"text-class-1",
+          testeClass2:"text-class-2",
+          classList: ["text-class-1","text-class-2"]
+        }
+      },
+      methods: {
+        increment: function () {
+          this.age++;
+        },
+        decrement() {
+          this.age--;
+        },
+        loggout() {
+          this.isUserLogged = !this.isUserLogged;
+        },
+        eventTestSimple(e){
+          console.log(e);
+        },
+        eventTest(e, p){
+          console.log(e,p.type);
+        },
+        eventKeyTest(e){
+          console.log(e.key,e.type);
+        }
+      },
+      computed: {
+        fullName() {
+          return `${this.firstName} ${this.lastName}`;
+        }
+      },
+      watch: {
+        address: function (a, b) {
+          console.log(a, b);
+        }
+      }
+    }).mount("#main")
+  </script>
+</body>
+
+</html>
